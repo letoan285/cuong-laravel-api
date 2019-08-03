@@ -15,11 +15,7 @@ class ProductController extends Controller
     public function index()
     {
         $products = Product::all();
-        return response()->json([
-            'status' => 200,
-            'data' => $products,
-            'message' => 'Success'
-        ]);
+        return response()->json($products);
     }
 
     /**
@@ -40,7 +36,14 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $product = new Product();
+        $product->name = $request->name;
+        $product->slug = $request->slug;
+        $product->description = $request->description;
+        $product->price = $request->price;
+        $product->category_id = $request->category_id;
+        $product->save();
+        return response()->json($product);
     }
 
     /**
@@ -52,11 +55,7 @@ class ProductController extends Controller
     public function show(Product $product, $id)
     {
         $product = Product::find($id);
-        return response()->json([
-            'status' => 200,
-            'data' => $product,
-            'message' => 'Success'
-        ]);
+        return response()->json($product);
     }
 
     /**
@@ -77,9 +76,16 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Product $product)
+    public function update(Request $request, Product $product, $id)
     {
-        //
+        $product = Product::find($id);
+        $product->name = $request->name;
+        $product->slug = $request->slug;
+        $product->description = $request->description;
+        $product->price = $request->price;
+        $product->category_id = $request->category_id;
+        $product->update();
+        return response()->json($product);
     }
 
     /**
@@ -88,8 +94,10 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Product $product)
+    public function destroy(Product $product, $id)
     {
-        //
+        $product = Product::find($id);
+        $product->delete();
+        return response()->json($product);
     }
 }
