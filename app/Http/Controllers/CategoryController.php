@@ -14,7 +14,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        //
+        return Category::all();
     }
 
     /**
@@ -35,7 +35,12 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $cate = new Category();
+        $cate->name = $request->name;
+        $cate->slug = $request->slug;
+        $cate->description = $request->description;
+        $cate->save();
+        return response()->json($cate);
     }
 
     /**
@@ -44,9 +49,9 @@ class CategoryController extends Controller
      * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function show(Category $category)
+    public function show(Category $category, $id)
     {
-        //
+        return Category::find($id);
     }
 
     /**
@@ -67,9 +72,14 @@ class CategoryController extends Controller
      * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Category $category)
+    public function update(Request $request, Category $category, $id)
     {
-        //
+        $cate = Category::find($id);
+        $cate->name = $request->name;
+        $cate->slug = $request->slug;
+        $cate->description = $request->description;
+        $cate->update();
+        return response()->json($cate);
     }
 
     /**
@@ -78,8 +88,14 @@ class CategoryController extends Controller
      * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Category $category)
+    public function destroy(Category $category, $id)
     {
-        //
+        $cate = Category::find($id);
+        $cate->delete();
+        return $cate;
+    }
+    public function getProductByCategoryId(Request $request, $id){
+        $cate = Category::find($id)->products;
+        return response()->json($cate);
     }
 }
